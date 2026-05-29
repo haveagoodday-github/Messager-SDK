@@ -1,8 +1,31 @@
 // 这是一个非常经典的 JitPack AAR 发布 Hack 技巧
+// 通过 maven-publish 插件让 JitPack 可以成功执行 publishToMavenLocal 任务
+
 plugins {
     id 'base'
+    id 'maven-publish'
 }
 
+group = project.hasProperty('group') ? project.group : 'com.github.haveagoodday-github'
+version = project.hasProperty('version') ? project.version : 'v1.0.0'
+
 configurations.maybeCreate("default")
+
 // 告诉 JitPack，这个仓库的最终产物就是这个 AAR 文件
-artifacts.add("default", file("messager-release.aar"))
+def aarFile = file("messager-release.aar")
+artifacts.add("default", aarFile)
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = project.group
+            artifactId = 'messager'
+            version = project.version
+
+            // 发布预构建的 AAR 文件
+            artifact(aarFile) {
+                extension = 'aar'
+            }
+        }
+    }
+}
