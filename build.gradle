@@ -1,0 +1,8 @@
+// 这是一个非常经典的 JitPack AAR 发布 Hack 技巧
+plugins {
+    id 'base'
+}
+
+configurations.maybeCreate("default")
+// 告诉 JitPack，这个仓库的最终产物就是这个 AAR 文件
+artifacts.add("default", file("messager-release.aar"))
